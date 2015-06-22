@@ -1,6 +1,8 @@
 #lang racket
 
-(provide (all-defined-out))
+(provide while once lazy-const display-and-flush)
+
+(provide/contract [vector-apply (vector? integer? any/c . -> . any/c)])
 
 (define-syntax-rule (while condition body ...)
   (let loop ()

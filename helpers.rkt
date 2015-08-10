@@ -1,6 +1,7 @@
 #lang racket
+(require (for-syntax racket/syntax))
 
-(provide while once lazy-const)
+(provide while once define-getter)
 
 (provide/contract [vector-apply
                    (vector? integer? (any/c . -> . any/c) . -> . any/c)]
@@ -22,8 +23,17 @@
         (set! const-result (begin body ...)))
       const-result)))
 
-(define-syntax-rule (lazy-const expr)
-  (lambda _ expr))
+(define-syntax (define-getter stx)
+  (syntax-case stx ()
+    [(define-getter) #'(begin)]
+    [(define-getter id0 id ...)
+     (with-syntax ([getter-name
+                    (format-id #'id0 #:source #'id0
+                               "get-~a" (syntax-e #'id0))])
+       #'(begin
+           (define/public (getter-name)
+             id0)
+           (define-getter id ...)))]))
 
 (define (vector-apply vec idx fn)
   (vector-set! vec idx (fn (vector-ref vec idx)))

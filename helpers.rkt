@@ -3,7 +3,7 @@
 
 (provide while once define-getter)
 
-(provide/contract [vector-apply
+(provide/contract [vector-mutate!
                    (vector? integer? (any/c . -> . any/c) . -> . any/c)]
                   [display-and-flush
                    (() #:rest (listof string?) . ->* . any/c)])
@@ -35,7 +35,7 @@
              id0)
            (define-getter id ...)))]))
 
-(define (vector-apply vec idx fn)
+(define (vector-mutate! vec idx fn)
   (vector-set! vec idx (fn (vector-ref vec idx)))
   vec)
 

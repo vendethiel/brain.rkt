@@ -39,23 +39,6 @@
              id0)
            (define-getter id ...)))]))
 
-(define-syntax (define-setter stx)
-  (syntax-case stx ()
-    [(define-setter) #'(begin)]
-    [(define-setter id0 id ...)
-     (with-syntax ([setter-name
-                    (format-id #'id0 #:source #'id0
-                               "set-~a!" (syntax-e #'id0))])
-       #'(begin
-           (define/public (setter-name)
-             id0)
-           (define-setter id ...)))]))
-
-(define-syntax-rule (define-getter-setter id ...)
-  (begin
-    (define-getter id ...)
-    (define-setter id ...)))
-
 (define (vector-mutate! vec idx fn)
   (vector-set! vec idx (fn (vector-ref vec idx)))
   vec)
